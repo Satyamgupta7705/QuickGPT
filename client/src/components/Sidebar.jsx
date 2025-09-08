@@ -82,13 +82,14 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
       {chats.length > 0 && <p className="mt-4 text-sm">Recent Chats</p>}
       <div className="flex-1 overflow-y-scroll mt-3 text-sm space-y-3">
         {chats
-          .filter((chat) =>
-            chat.messages[0]
-              ? chat.messages[0]?.content
-                  .toLowerCase()
-                  .includes(search.toLowerCase())
-              : chat.name.toLowerCase().includes(search.toLowerCase())
+          .filter(
+            (chat) =>
+              chat.messages?.[0]?.content
+                ?.toLowerCase()
+                ?.includes(search.toLowerCase()) ||
+              chat.name?.toLowerCase()?.includes(search.toLowerCase())
           )
+
           .map((chat) => (
             <div
               onClick={() => {
@@ -103,14 +104,18 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             >
               <div>
                 <p className="truncate w-full">
-                  {chat.messages.length > 0
-                    ? chat.messages[0]?.content.slice(0, 32)
-                    : chat.name}
+                  {chat.messages &&
+                  chat.messages.length > 0 &&
+                  chat.messages[0]?.content
+                    ? chat.messages[0].content.slice(0, 32)
+                    : chat.name || "No Messages"}
                 </p>
+
                 <p className="text-xs text-gray-500 dark:text-[#B1A6C0]">
                   {moment(chat.updatedAt).fromNow()}{" "}
                 </p>
               </div>
+
               <img
                 src={assets.bin_icon}
                 className="hidden group-hover:block

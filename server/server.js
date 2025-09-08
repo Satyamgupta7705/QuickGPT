@@ -1,7 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
 import cors from 'cors'
-import { connect } from 'mongoose'
 import connectDB from './configs/db.js'
 import userRouter from './routes/userRoutes.js'
 import chatRouter from './routes/chatRoutes.js'
@@ -13,22 +12,21 @@ const app = express()
 
 await connectDB()
 
-//Stripe webhooks
-app.post('/api/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
-
-//Middleware
+// Middleware
 app.use(cors())
 app.use(express.json())
 
-//Routes
-app.get('/', (req, res)=> res.send('Server is Live!'))
+// Routes
+app.get('/', (req, res) => res.send('Server is Live!'))
 app.use('/api/user', userRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
-const PORT = process.env.PORT || 3000
+// Stripe webhooks (keep this after express.json)
+app.post('/api/stripe', express.raw({ type: 'application/json' }), stripeWebhooks)
 
-app.listen(PORT, ()=>{
-    console.log(`Server is running on port ${PORT}`)
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
 })

@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
-axios.defaults.baseurl = import.meta.env.VITE_SERVER_URL;
+axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
+
 
 const AppContext = createContext();
 
@@ -47,7 +48,7 @@ export const AppContextProvider = ({ children }) => {
       if(data.success){
         setChats(data.chats)
 
-        if(data.chat.length === 0){
+        if(data.chats.length === 0){
           await createNewChat();
           return fetchUsersChats()
         }else{
